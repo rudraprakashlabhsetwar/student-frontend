@@ -122,7 +122,7 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <span>🌐 Frontend: Netlify</span>
+        <span>🌐 Frontend: Vercel</span>
         <span>⚙️ Backend: Render</span>
         <span>🗄️ Database: MongoDB Atlas</span>
       </footer>
