@@ -45,6 +45,15 @@ export default function StudentForm({ onSubmit, editingStudent, onCancel }) {
     if (!form.department) newErrors.department = 'Department required';
     if (!form.semester) newErrors.semester = 'Semester required';
     else if (form.semester < 1 || form.semester > 8) newErrors.semester = 'Semester must be 1-8';
+
+    // Validate contact number as exactly 10 digits
+    const contactStr = (form.contact || '').trim();
+    if (!contactStr) {
+      newErrors.contact = 'Contact number is required';
+    } else if (!/^\d{10}$/.test(contactStr)) {
+      newErrors.contact = 'Contact number must be exactly 10 digits';
+    }
+
     return newErrors;
   };
 
@@ -59,6 +68,7 @@ export default function StudentForm({ onSubmit, editingStudent, onCancel }) {
     const submission = {
       ...form,
       semester: Number(form.semester),
+      contact: form.contact.trim(),
     };
 
     if (editingStudent) {
@@ -95,21 +105,21 @@ export default function StudentForm({ onSubmit, editingStudent, onCancel }) {
         </div>
 
         <div className="form-group">
-  <select 
-  name="department" 
-  value={form.department} 
-  onChange={handleChange} 
-  required
-  style={{ color: form.department === '' ? '#64748b' : '#f8fafc' }}
->
-  <option value="" disabled hidden>Select Department *</option>
-  <option value="Computer Science" style={{ color: '#fdfdfd' }}>Computer Science</option>
-  <option value="Electrical" style={{ color: '#fcfcfd' }}>Electrical</option>
-  <option value="Civil" style={{ color: '#ffffff' }}>Civil</option>
-  <option value="Mechanical" style={{ color: '#ffffff' }}>Mechanical</option>
-</select>
-  {errors.department && <span className="error">{errors.department}</span>}
-</div>
+          <select 
+            name="department" 
+            value={form.department} 
+            onChange={handleChange} 
+            required
+            style={{ color: form.department === '' ? '#64748b' : '#f8fafc' }}
+          >
+            <option value="" disabled hidden>Select Department *</option>
+            <option value="Computer Science" style={{ color: '#fdfdfd' }}>Computer Science</option>
+            <option value="Electrical" style={{ color: '#fcfcfd' }}>Electrical</option>
+            <option value="Civil" style={{ color: '#ffffff' }}>Civil</option>
+            <option value="Mechanical" style={{ color: '#ffffff' }}>Mechanical</option>
+          </select>
+          {errors.department && <span className="error">{errors.department}</span>}
+        </div>
 
         <div className="form-group">
           <input name="semester" type="number" placeholder="Semester (1-8) *" min="1" max="8" value={form.semester} onChange={handleChange} />
@@ -117,7 +127,15 @@ export default function StudentForm({ onSubmit, editingStudent, onCancel }) {
         </div>
 
         <div className="form-group">
-          <input name="contact" placeholder="Contact (10 digits)" value={form.contact} onChange={handleChange} />
+          <input 
+            name="contact" 
+            type="tel" 
+            placeholder="Contact (exactly 10 digits) *" 
+            maxLength="10" 
+            value={form.contact} 
+            onChange={handleChange} 
+          />
+          {errors.contact && <span className="error">{errors.contact}</span>}
         </div>
 
         <div className="form-buttons">

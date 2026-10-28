@@ -1,7 +1,15 @@
 import axios from 'axios';
 
+// Support VITE_API_URL or REACT_APP_API_URL with automatic fallback and /api normalization
+const rawBaseURL =
+  (typeof import.meta !== 'undefined' && import.meta.env && (import.meta.env.VITE_API_URL || import.meta.env.REACT_APP_API_URL)) ||
+  'https://student-api-xjlq.onrender.com/api';
+
+const cleanBase = rawBaseURL.replace(/\/+$/, '');
+const baseURL = cleanBase.endsWith('/api') ? cleanBase : `${cleanBase}/api`;
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
